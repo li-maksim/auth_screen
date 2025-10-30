@@ -18,6 +18,10 @@ function LoginScreen() {
         setStep(step - 1)
     }
 
+    function onSuccess() {
+        alert("Welcome!")
+    }
+
     return (
         <QueryClientProvider client={queryClient}>
             <div className="bg-white p-8 rounded-2xl w-full max-w-md space-y-4">
@@ -26,7 +30,7 @@ function LoginScreen() {
                     <h3 className="font-bold">Company</h3>
                 </div>
                 {step === 1 && <LoginForm forwardFn={forward} />}
-                {step === 2 && <TwoFAForm backFn={back} />}
+                {step === 2 && <TwoFAForm backFn={back} onSuccess={onSuccess} />}
             </div>
         </QueryClientProvider>
     )
