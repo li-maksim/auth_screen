@@ -54,6 +54,7 @@ function TwoFAForm({onSuccess}) {
     }
   }, [code])
 
+  let isCodeWrong = isCodeComplete && mutation.isError
   let isSuccesful = isCodeComplete && !mutation.isPending && !mutation.isError
 
   function handleResend() {
@@ -71,7 +72,7 @@ function TwoFAForm({onSuccess}) {
   return (
     <form onSubmit={(e) => handleSubmit(e)}>
       <h2 className="text-2xl text-center font-semibold mb-2">Two-Factor Authentication</h2>
-      <p className="text-center"> Enter the 6-digit code from the Google Authenticator app </p>
+      <p className="text-center font-light"> Enter the 6-digit code from the Google Authenticator app </p>
 
       <div className="flex justify-between gap-2 mt-4">
         {digits.map((digit, i) => (
@@ -83,13 +84,17 @@ function TwoFAForm({onSuccess}) {
             onChange={(e) => handleInputsChange(i, e.target.value)}
             onKeyDown={(e) => handleKeyDown(i, e)}
             ref={(el) => (inputsRef.current[i] = el)}
-            className="w-12 h-14 border border-gray-300 text-center text-xl font-semibold rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className={
+              !isCodeWrong
+                ? "w-[52px] h-[60px] border border-gray-300 text-center text-xl font-semibold rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                : "w-[52px] h-[60px] border border-gray-300 text-center text-xl font-semibold rounded-md border-red-400 focus:ring-red-400"
+            }
           />
         ))}
       </div>
 
-      {mutation.isError && (
-      <div className="text-red-600 text-sm mt-[16px]">{"Invalid code"}</div>
+      {isCodeWrong && (
+      <div className="text-red-400 text-sm mt-[6px]">{"Invalid code"}</div>
       )}
 
       {(canResend && !isCodeComplete) && (

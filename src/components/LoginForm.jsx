@@ -36,23 +36,24 @@ function LoginForm({forwardFn}) {
             <h2 className="text-2xl font-medium text-center ">Sign in to your account to continue</h2>
             <div className="mt-[24px] flex flex-col gap-[16px]">
                 <div className="relative">
-                    <UserRound className="absolute left-3 top-3.5 text-gray-400 w-4 h-4" />
+                    <UserRound className="absolute left-3 top-[11px] text-gray-400 w-4 h-4" />
                     <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email"></Input>
                 </div>
                 <div className="relative">
-                    <LockKeyhole className="absolute left-3 top-3.5 text-gray-400 w-4 h-4" />
+                    <LockKeyhole className="absolute left-3 top-3 text-gray-400 w-4 h-4" />
                     <Input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password"></Input>
+                    {mutation.isError && (
+                    <div className="text-red-400 text-sm mt-[6px]">{showErrorMessage(mutation.error)}</div>
+                    )}
                 </div>
-                {mutation.isError && (
-                    <div className="text-red-600 text-sm">{showErrorMessage(mutation.error)}</div>
-                )}
+
                 <button 
                     type="submit" 
                     disabled={!isFormValid} 
                     className={
                         isFormValid 
                             ? "w-full bg-blue-600 text-white py-2 rounded-md cursor-pointer"
-                            : "w-full bg-gray-100 text-gray-300 py-2 rounded-md"
+                            : "w-full bg-gray-100 text-gray-400 border border-gray-300 py-2 rounded-md"
                     }
                 >
                     Log in

@@ -37,8 +37,27 @@ function LoginScreen() {
                     <img src={symbol}/>
                     <h3 className="font-semibold">Company</h3>
                 </div>
-                {step === 1 && <LoginForm forwardFn={forward} />}
-                {step === 2 && <TwoFAForm onSuccess={onSuccess} />}
+
+                <div className="relative w-full">
+                    <div
+                        className={`
+                            origin-top transition-all duration-300 ease-in-out
+                            ${step === 1 ? "scale-y-100 opacity-100 z-10" : "scale-y-0 opacity-0 z-0 absolute top-0 left-0 w-full"}
+                        `}
+                    >
+                        <LoginForm forwardFn={forward} />
+                    </div>
+
+                    <div
+                        className={`
+                            origin-top transition-all duration-300 ease-in-out
+                            ${step === 2 ? "scale-y-100 opacity-100 z-10" : "scale-y-0 opacity-0 z-0 absolute top-0 left-0 w-full"}
+                        `}
+                    >
+                        <TwoFAForm onSuccess={onSuccess} />
+                    </div>
+                </div>
+
             </div>
         </QueryClientProvider>
     )

@@ -9,7 +9,7 @@ function Input({ label, type, value, onChange, placeholder}) {
           value={value}
           onChange={onChange}
           placeholder={placeholder}
-          className="w-full border border-gray-300 rounded-md py-2.5 px-3 text-m text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 pl-8"
+          className="w-full max-h-[40px] border border-gray-300 rounded-md py-2.5 px-3 text-m text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 pl-8"
         />
       </div>
     )
