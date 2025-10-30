@@ -1,4 +1,4 @@
-async function mockLoginAPI({email, password}) {
+async function mockLoginAPI({ email, password }) {
     await new Promise((res) => setTimeout(res, 500))
 
     switch (password) {
@@ -9,7 +9,7 @@ async function mockLoginAPI({email, password}) {
         case "3333":
             throw { code: "ACCOUNT_LOCKED", message: "Account locked" }
         case "4444":
-            return {token: "token", user: { email }, requires2FA: true}
+            return { token: "token", user: { email }, requires2FA: true }
         default:
             throw { code: "INVALID_CREDENTIALS", message: "Invalid email or password" }
     }
