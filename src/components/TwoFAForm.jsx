@@ -2,7 +2,7 @@ import { useRef, useState, useEffect } from "react"
 import { useMutation } from "@tanstack/react-query"
 import mock2FA from "../utils/mock2FA"
 
-function TwoFAForm({backFn, onSuccess}) {
+function TwoFAForm({onSuccess}) {
 
   const initialDigits = ["", "", "", "", "", ""]
 
@@ -46,6 +46,15 @@ function TwoFAForm({backFn, onSuccess}) {
   }
 
   let code = digits.join("")
+  let isCodeComplete = code.length === 6
+
+  useEffect(() => {
+    if (isCodeComplete && !mutation.isPending) {
+      mutation.mutate({ code })
+    }
+  }, [code])
+
+  let isSuccesful = isCodeComplete && !mutation.isPending && !mutation.isError
 
   function handleResend() {
     setDigits(initialDigits)
@@ -54,45 +63,54 @@ function TwoFAForm({backFn, onSuccess}) {
     inputsRef.current[0].focus()
   }
 
-  useEffect(() => {
-    if (code.length === 6 && !mutation.isPending) {
-      mutation.mutate({ code })
-    }
-  }, [code])
+  function handleSubmit(e) {
+    e.preventDefault()
+    alert("Welcome!")
+  }
 
-    return (
-      <form>
-        <h2 className="text-2xl font-semibold mb-2">Two-Factor Authentication</h2>
-        <p> Enter the 6-digit code from the Google Authenticator app </p>
+  return (
+    <form onSubmit={(e) => handleSubmit(e)}>
+      <h2 className="text-2xl text-center font-semibold mb-2">Two-Factor Authentication</h2>
+      <p className="text-center"> Enter the 6-digit code from the Google Authenticator app </p>
 
-        <div className="flex justify-between gap-2 mt-4">
-          {digits.map((digit, i) => (
-            <input
-              key={i}
-              type="text"
-              maxLength="1"
-              value={digit}
-              onChange={(e) => handleInputsChange(i, e.target.value)}
-              onKeyDown={(e) => handleKeyDown(i, e)}
-              ref={(el) => (inputsRef.current[i] = el)}
-              className="w-12 h-12 border border-gray-300 text-center text-xl rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          ))}
-        </div>
+      <div className="flex justify-between gap-2 mt-4">
+        {digits.map((digit, i) => (
+          <input
+            key={i}
+            type="text"
+            maxLength="1"
+            value={digit}
+            onChange={(e) => handleInputsChange(i, e.target.value)}
+            onKeyDown={(e) => handleKeyDown(i, e)}
+            ref={(el) => (inputsRef.current[i] = el)}
+            className="w-12 h-14 border border-gray-300 text-center text-xl font-semibold rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        ))}
+      </div>
 
-        {mutation.isError && (
-        <div className="text-red-600 text-sm mt-2">{"Invalid code"}</div>
-        )}
+      {mutation.isError && (
+      <div className="text-red-600 text-sm mt-[16px]">{"Invalid code"}</div>
+      )}
 
-        {canResend && (
-          <button onClick={() => handleResend()} className="w-full bg-blue-600 text-white py-2 rounded-md cursor-pointer">
-            Get new
-          </button>
-        )}
+      {(canResend && !isCodeComplete) && (
+        <button onClick={() => handleResend()} className="w-full bg-blue-600 mt-[16px] text-white py-2 rounded-md cursor-pointer">
+          Get new
+        </button>
+      )}
 
-        <button onClick={backFn} className="cursor-pointer" >Back</button>
-      </form>
-    )
+      {isCodeComplete && (
+        <button 
+          type="submit" 
+          className={
+            isSuccesful
+              ? "w-full bg-blue-600 mt-[16px] text-white py-2 rounded-md cursor-pointer"
+              : "w-full bg-gray-100 mt-[16px] text-gray-300 py-2 rounded-md"
+          }>
+          Continue
+        </button>
+      )}
+    </form>
+  )
 }
 
 export default TwoFAForm
