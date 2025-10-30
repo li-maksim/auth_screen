@@ -9,7 +9,7 @@ async function mockLoginAPI({email, password}) {
         case "3333":
             throw { code: "ACCOUNT_LOCKED", message: "Account locked" }
         case "4444":
-            return {token: "token", user: { email }}
+            return {token: "token", user: { email }, requires2FA: true}
         default:
             throw { code: "INVALID_CREDENTIALS", message: "Invalid email or password" }
     }
